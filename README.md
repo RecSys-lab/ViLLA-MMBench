@@ -20,7 +20,7 @@ Welcome to the **ViLLA-MMBench** repository! This project provides the source co
 
 ```bibtex
 @article{mmvideorec,
-  title={ViLLA-MMBenchc: ViLLA-MMBench: A Unified Benchmark Suite for LLM-Augmented Multimodal Movie Recommendation},
+  title={ViLLA-MMBench: A Unified Benchmark Suite for LLM-Augmented Multimodal Movie Recommendation},
   author={TBD},
   journal={TBD},
   year={2025}
