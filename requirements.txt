@@ -3,4 +3,5 @@ pandas
 pyyaml
 cornac
 pandas
+requests
 matplotlib

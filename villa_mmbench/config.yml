@@ -37,4 +37,4 @@ data:
     # Ratio of test data
     test_ratio: 0.2
   # Number of cores for k-core filtering
-  k_core: 0 # 0 means no k-core filtering
+  k_core: 10
