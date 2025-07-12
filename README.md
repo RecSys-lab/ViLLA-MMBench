@@ -14,6 +14,8 @@ Welcome to the **ViLLA-MMBench** repository! This project provides the source co
 - Clone the current repository using `git@github.com:RecSys-lab/ViLLA-MMBench.git`
 - Create and activate a virtual environment using `python -m venv venv` and then `.\venv\Scripts\activate` (Windows)
 - Install the packages using `pip install -e .` (running `setup.py` file)
+- Check the configurations required for running the experiments in [villa_mmbench/config.yml](/villa_mmbench/config.yml)
+- Run the framework by running [villa_mmbench/main.py](/villa_mmbench/main.py)!
 
 ## 📂 Folders and Files
 
