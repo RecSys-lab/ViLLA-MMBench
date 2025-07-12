@@ -1,0 +1,40 @@
+general:
+  # The name of the framework
+  name: "ViLLA-MMBench"
+experiment:
+  # Fast prototype flag (for quick testing with 1 epoch)
+  fast_prototype: true
+  # Use GPU for hyperparameter optimization
+  use_gpu_for_hpo: false
+  # Parallel hyperparameter optimization
+  parallel_hpo: true
+  # Seed for reproducibility
+  seed: 42
+  # Verbose logging
+  verbose: true
+  # Number of epochs for training
+  n_epochs: 20 # Ineffective if fast_prototype is true
+modality:
+  # Model choice for the experiment
+  model_choice: "vbpr" # 'cf' | 'vbpr' | 'amr' | 'vmf'
+  # LLM prefix for text processing
+  llm_prefix: "openai" # 'openai' | 'st' | 'llama'
+  # Use augmented textual path
+  text_augmented: true # True → use augmented textual path
+  # Audio variant to use (from MMTF-14K)
+  audio_variant: "blf" # 'blf' | 'i_ivec'
+  # Visual variant to use (from MMTF-14K)
+  visual_variant: "cnn" # 'avf' | 'cnn'
+  # Maximum number of text parts
+  text_max_parts: 15
+data:
+  # Dataset version to use
+  ml_version: "1m" # '100k' | '1m'
+  # Dataset split configuration
+  split:
+    # Mode of dataset splitting
+    mode: "random" # 'random' | 'sequential'
+    # Ratio of test data
+    test_ratio: 0.2
+  # Number of cores for k-core filtering
+  k_core: 0 # 0 means no k-core filtering
