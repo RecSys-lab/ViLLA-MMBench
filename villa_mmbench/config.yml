@@ -18,7 +18,7 @@ modality:
   # Model choice for the experiment
   model_choice: "vbpr" # 'cf' | 'vbpr' | 'amr' | 'vmf'
   # LLM prefix for text processing
-  llm_prefix: "openai" # 'openai' | 'st' | 'llama'
+  llm_prefix: "llama" # 'openai' | 'st' | 'llama'
   # Use augmented textual path
   text_augmented: true # True → use augmented textual path
   # Audio variant to use (from MMTF-14K)

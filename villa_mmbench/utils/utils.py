@@ -1,5 +1,6 @@
 import os
 import yaml
+import numpy as np
 
 # Multimodal fusion variants
 MULTI_VARIANTS = [
@@ -50,3 +51,22 @@ def applyKcore(df, k):
         vc = df.item_id.value_counts(); df=df[df.item_id.isin(vc[vc>=k].index)]
         changed = len(df)<before
     return df
+
+def parseSafe(s: str) -> np.ndarray:
+    """
+    Converts a string representation of a vector into a NumPy array.
+
+    Parameters
+    ----------
+    s : str
+        The string representation of the vector, where elements are separated by commas or spaces.
+
+    Returns
+    -------
+    np.ndarray
+        A NumPy array containing the elements of the vector, with non-finite values replaced by 0.0.
+    """
+    vec = np.fromstring(str(s).replace(',', ' '), sep=' ', dtype=np.float32)
+    if not np.all(np.isfinite(vec)):
+        vec = np.nan_to_num(vec, nan=0.0, posinf=0.0, neginf=0.0)
+    return vec

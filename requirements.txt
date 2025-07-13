@@ -5,3 +5,4 @@ cornac
 pandas
 requests
 matplotlib
+scikit-learn
