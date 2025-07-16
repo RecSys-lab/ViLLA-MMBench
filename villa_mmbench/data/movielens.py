@@ -139,4 +139,6 @@ def prepareML(config: dict):
         train_df, test_df=pd.DataFrame(trs),pd.DataFrame(tes)
     # Make the train set
     if VERBOSE: print(f"✔ Split train = {len(train_df):,}  test = {len(test_df):,}")
-    train_set = Dataset.from_uir(train_df[['user_id','item_id','rating']].values.tolist())
+    # train_set = Dataset.from_uir(train_df[['user_id','item_id','rating']].values.tolist())
+    # Return
+    return train_df, test_df, genre_dict

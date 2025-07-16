@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from data.text import loadText
 from data.audio import loadAudio
 from data.visual import loadVisual
@@ -8,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from villa_mmbench.utils.utils import MULTI_VARIANTS
 from cornac.data import ImageModality, FeatureModality, Dataset
 
-def prepareModalities(config: dict):
+def prepareModalities(config: dict, train_df: pd.DataFrame, test_df: pd.DataFrame):
     # Variables
     SEED = config['experiment']['seed']
     VERBOSE = config['experiment']['verbose']
@@ -47,7 +48,7 @@ def prepareModalities(config: dict):
         'all_image':   _im('all'),
         'all_feature': _ft('all'),
     }
-    if VERBOSE: print("✔ Concat ready!")
+    if VERBOSE: print("✔ Concat is ready!")
     # Add modalities to the dataset
     for tag, param in MULTI_VARIANTS:
         if tag == 'concat': continue
@@ -57,7 +58,7 @@ def prepareModalities(config: dict):
             mat = PCA(ratio,random_state=SEED).fit_transform(mat)
             merged[name] = list(mat.astype(np.float32))
             modalities_dict[name] = {'all_image':_im(name),'all_feature':_ft(name)}
-            if VERBOSE: print(f"✔ PCA {int(ratio*100)} dims={mat.shape[1]}")
+            if VERBOSE: print(f"✔ PCA {int(ratio*100)} dims = {mat.shape[1]}")
         elif tag == 'cca':
             comps = param; name=f"cca_{comps}"
             half = len(merged['all'][0])//2
@@ -65,6 +66,4 @@ def prepareModalities(config: dict):
             cca = CCA(n_components=comps).fit(X,Y)
             merged[name] = list(cca.transform(X,Y)[0].astype(np.float32))
             modalities_dict[name] = {'all_image':_im(name),'all_feature':_ft(name)}
-            if VERBOSE: print(f"✔ CCA {comps} dims={comps}")
-    # Return
-    return train_set, test_df, modalities_dict
+            if VERBOSE: print(f"✔ CCA {comps} dims = {comps}")

@@ -10,9 +10,9 @@ def main():
     config = readConfigs('config.yml')
     print(f"Starting '{config['general']['name']}' ... Configurations loaded successfully!")
     # Step 1: Prepare MovieLens and split into train and test sets
-    prepareML(config)
+    train_df, test_df, genre_dict = prepareML(config)
     # Step 2: Load text, visual, and audio embeddings
-    train_set, test_df, modalities_dict = prepareModalities(config)
+    prepareModalities(config, train_df, test_df)
     print("\nExiting the framework ...")
 
 
