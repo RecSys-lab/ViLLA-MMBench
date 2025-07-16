@@ -6,3 +6,4 @@ pandas
 requests
 matplotlib
 scikit-learn
+cupy-cuda11x # or cupy-cuda12x

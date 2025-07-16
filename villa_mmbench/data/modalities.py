@@ -67,3 +67,5 @@ def prepareModalities(config: dict, train_df: pd.DataFrame, test_df: pd.DataFram
             merged[name] = list(cca.transform(X,Y)[0].astype(np.float32))
             modalities_dict[name] = {'all_image':_im(name),'all_feature':_ft(name)}
             if VERBOSE: print(f"✔ CCA {comps} dims = {comps}")
+    # Return
+    return train_df, test_df, train_set, modalities_dict
