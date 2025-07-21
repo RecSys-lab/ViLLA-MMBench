@@ -1,6 +1,7 @@
 import os
 import copy
 import yaml
+import itertools
 import numpy as np
 
 # Multimodal fusion variants
@@ -116,3 +117,32 @@ def fitWithModalities(model, base_ds, item_img=None, item_feat=None):
     if item_feat is not None:
         ds.item_feature = item_feat
     model.fit(ds)
+
+
+def gini(x):
+    if not x:
+        return 0.0
+    sx = sorted(x)
+    n = len(sx)
+    tot = sum(sx)
+    if tot == 0:
+        return 0.0
+    cum = sum((i + 1) * val for i, val in enumerate(sx))
+    return (2 * cum) / (n * tot) - (n + 1) / n
+
+
+def ild(genres_list):
+    if len(genres_list) <= 1:
+        return 0.0
+    pairs = itertools.combinations(genres_list, 2)
+    dissim = [1 - len(set(a) & set(b)) / len(set(a) | set(b)) for a, b in pairs]
+    return float(np.mean(dissim))
+
+
+def kl_div(p, q, eps=1e-8):
+    keys = set(p) | set(q)
+    p_vec = np.array([p.get(k, eps) for k in keys], dtype=float)
+    q_vec = np.array([q.get(k, eps) for k in keys], dtype=float)
+    p_vec /= p_vec.sum()
+    q_vec /= q_vec.sum()
+    return (p_vec * np.log(p_vec / q_vec)).sum()

@@ -4,6 +4,7 @@
 from utils.utils import readConfigs
 from process.grid import gridSearch
 from data.movielens import prepareML
+from process.processes import generateLists
 from data.modalities import prepareModalities
 
 
@@ -21,6 +22,8 @@ def main():
     )
     # Step 3: Hyperparameter tuning using grid search
     final_models = gridSearch(config, train_df, train_set, modalities_dict)
+    # Step 4: Generate recommendations for the test set
+    generateLists(config, train_df, train_set)
     print("\nExiting the framework ...")
 
 
