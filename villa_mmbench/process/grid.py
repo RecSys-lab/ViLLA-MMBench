@@ -34,8 +34,13 @@ def gridMetric(model, val_grp, train_fit_set, train_seen, iid_map, all_iids, USE
         ndcg.append(dcg/idcg if idcg else 0)
     return 0.5 * (np.mean(rec)+np.mean(ndcg))
 
-def grid(cls, name, scenario, param_grid, val_grp, 
-         train_fit_set, train_seen, iid_map, all_iids, config: dict, *fit_args):
+def grid(dataDict, cls, name, scenario, param_grid, *fit_args):
+    config = dataDict['config']
+    val_grp = dataDict['val_grp']
+    iid_map = dataDict['iid_map']
+    all_iids = dataDict['all_iids']
+    train_seen = dataDict['train_seen']
+    train_fit_set = dataDict['train_fit_set']
     # Variables
     SEED = config['experiment']['seed']
     VERBOSE = config['experiment']['verbose']
@@ -67,18 +72,21 @@ def gridSearch(config: dict, train_df: pd.DataFrame, modalities_dict: dict):
     SEED = config['experiment']['seed']
     VERBOSE = config['experiment']['verbose']
     N_EPOCHS = config['experiment']['n_epochs']
+    MODEL_CHOICE = config['modality']['model_choice']
     FAST_Prtye = config['experiment']['fast_prototype']
     USE_GPU_FOR_HPO = config['experiment']['use_gpu_for_hpo']
     # Monkey‑patch so that csr_matrix.A → csr_matrix.toarray()
     if not hasattr(scipy.sparse.csr_matrix, 'A'):
         scipy.sparse.csr_matrix.A = property(lambda self: self.toarray())
     # 
+    print(f"\nPreparing GridSearch procedure ...")
     train_fit_df, val_df = train_test_split(train_df, test_size = 0.1, random_state = SEED)
     val_grp = val_df.groupby('user_id')['item_id'].apply(list).to_dict()
     train_seen = train_fit_df.groupby('user_id')['item_id'].apply(set).to_dict()
     train_fit_set = Dataset.from_uir(train_fit_df[['user_id','item_id','rating']].values.tolist())
     all_iids, iid_map = train_fit_set.item_ids, train_fit_set.iid_map
     # Prepare the dataset with modalities
+    print("✔ Preparing dataset with modalities ...")
     GR_MF = [{'k':k,'learning_rate':lr,'lambda_reg':0.01,'max_iter':50}
          for k in (32,64,128) for lr in (0.01,0.005)][0:5]
     GR_VAECF = [{'k':k,'learning_rate':lr,'beta':0.01}
@@ -110,43 +118,44 @@ def gridSearch(config: dict, train_df: pd.DataFrame, modalities_dict: dict):
         GR_AMR=[{'k':k,'k2':k2,'learning_rate':lr}
                 for k in (32,64,128) for k2 in (16,32) for lr in (0.001,)][0:5]
     # Run grid search for each model
-    if modelIsSelected('MF'):
-        models_cfg['MF'] = grid(MF, 'MF', '(na)', GR_MF, val_grp, 
-                                      train_fit_set, train_seen, iid_map, all_iids, config)
-    if modelIsSelected('VAECF'):
-        models_cfg['VAECF'] = grid(VAECF, 'VAECF', '(na)', GR_VAECF, val_grp, train_fit_set,
-                                         train_seen, iid_map, all_iids, config)
-    if modelIsSelected('VBPR'):
+    print("✔ Starting HPO ...")
+    dataDict = {
+        'val_grp': val_grp,
+        'train_seen': train_seen,
+        'iid_map': iid_map,
+        'all_iids': all_iids,
+        'train_fit_set': train_fit_set,
+        'config': config
+    }
+    if modelIsSelected('MF', MODEL_CHOICE):
+        models_cfg['MF'] = grid(dataDict, MF, 'MF', '(na)', GR_MF, train_fit_set)
+    if modelIsSelected('VAECF', MODEL_CHOICE):
+        models_cfg['VAECF'] = grid(dataDict, VAECF, 'VAECF', '(na)', GR_VAECF, train_fit_set)
+    if modelIsSelected('VBPR', MODEL_CHOICE):
         for mod in ('visual','audio','text'):
-            models_cfg[f'VBPR_{mod}'] = grid(VBPR,'VBPR',mod,GR_VBPR, val_grp, 
-                                            train_fit_set, train_seen, iid_map, all_iids, config,
-                                            modalities_dict['concat'][f'{mod}_image'])
+            models_cfg[f'VBPR_{mod}'] = grid(dataDict, VBPR,'VBPR', mod, GR_VBPR,  
+                                            train_fit_set, modalities_dict['concat'][f'{mod}_image'])
         for mv in modalities_dict:
             if mv=='concat':continue
-            models_cfg[f'VBPR_{mv}'] = grid(VBPR,'VBPR',mv,GR_VBPR, val_grp, 
-                                        train_fit_set, train_seen, iid_map, all_iids, config,
-                                        modalities_dict[mv]['all_image'])
-    if modelIsSelected('VMF'):
+            models_cfg[f'VBPR_{mv}'] = grid(dataDict, VBPR,'VBPR',mv,GR_VBPR, 
+                                        train_fit_set, modalities_dict[mv]['all_image'])
+    if modelIsSelected('VMF', MODEL_CHOICE):
         for mod in ('visual','audio','text'):
-            models_cfg[f'VMF_{mod}'] = grid(VMF,'VMF',mod,GR_VMF, val_grp, 
-                                        train_fit_set, train_seen, iid_map, all_iids, config,
-                                        modalities_dict['concat'][f'{mod}_image'])
+            models_cfg[f'VMF_{mod}'] = grid(dataDict, VMF,'VMF',mod,GR_VMF, 
+                                        train_fit_set, modalities_dict['concat'][f'{mod}_image'])
         for mv in modalities_dict:
             if mv=='concat':continue
-            models_cfg[f'VMF_{mv}'] = grid(VMF,'VMF',mv,GR_VMF, val_grp, 
-                                        train_fit_set, train_seen, iid_map, all_iids, config,
-                                        modalities_dict[mv]['all_image'])
-    if modelIsSelected('AMR'):
+            models_cfg[f'VMF_{mv}'] = grid(dataDict, VMF,'VMF',mv,GR_VMF, 
+                                        train_fit_set, modalities_dict[mv]['all_image'])
+    if modelIsSelected('AMR', MODEL_CHOICE):
         for mod in ('visual','audio','text'):
-            models_cfg[f'AMR_{mod}'] = grid(AMR,'AMR',mod,GR_AMR, val_grp, 
-                                        train_fit_set, train_seen, iid_map, all_iids, config,
-                                        modalities_dict['concat'][f'{mod}_image'],
+            models_cfg[f'AMR_{mod}'] = grid(dataDict, AMR,'AMR',mod,GR_AMR, 
+                                        train_fit_set, modalities_dict['concat'][f'{mod}_image'],
                                         modalities_dict['concat']['all_feature'])
         for mv in modalities_dict:
             if mv=='concat':continue
-            models_cfg[f'AMR_{mv}'] = grid(AMR,'AMR',mv,GR_AMR, val_grp, 
-                                        train_fit_set, train_seen, iid_map, all_iids, config,
-                                        modalities_dict[mv]['all_image'],
+            models_cfg[f'AMR_{mv}'] = grid(dataDict, AMR,'AMR',mv,GR_AMR, 
+                                        train_fit_set, modalities_dict[mv]['all_image'],
                                         modalities_dict[mv]['all_feature'])
     # Finished
     print(f"✔ HPO done - {len(models_cfg)} configs kept")

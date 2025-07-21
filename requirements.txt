@@ -1,3 +1,4 @@
+torch 
 numpy
 pandas
 pyyaml
@@ -5,5 +6,7 @@ cornac
 pandas
 requests
 matplotlib
+torchaudio
+torchvision
 scikit-learn
 cupy-cuda11x # or cupy-cuda12x

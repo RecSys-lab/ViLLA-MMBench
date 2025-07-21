@@ -16,7 +16,7 @@ experiment:
   n_epochs: 20 # Ineffective if fast_prototype is true
 modality:
   # Model choice for the experiment
-  model_choice: "vbpr" # 'cf' | 'vbpr' | 'amr' | 'vmf'
+  model_choice: "cf" # 'cf' | 'vbpr' | 'amr' | 'vmf'
   # LLM prefix for text processing
   llm_prefix: "llama" # 'openai' | 'st' | 'llama'
   # Use augmented textual path
