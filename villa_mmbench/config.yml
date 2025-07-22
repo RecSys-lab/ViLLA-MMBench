@@ -40,4 +40,4 @@ data:
   k_core: 10
 recommender:
   topN_k: 10
-  cold_threshold: 5 # ≤ 5 ratings = “cold”
+  cold_threshold: 5 # LE 5 ratings is cold

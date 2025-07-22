@@ -12,3 +12,6 @@ villa_mmbench/data/downloaded/u.data
 villa_mmbench/data/downloaded/u.item
 villa_mmbench/data/downloaded/ml-1m.zip
 villa_mmbench/data/downloaded/ml-1m/
+
+# Outputs
+/outputs/*.csv

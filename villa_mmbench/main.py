@@ -23,7 +23,7 @@ def main():
     # Step 3: Hyperparameter tuning using grid search
     final_models = gridSearch(config, train_df, train_set, modalities_dict)
     # Step 4: Generate recommendations for the test set
-    generateLists(config, train_df, train_set)
+    generateLists(config, train_df, train_set, test_df, genre_dict, final_models)
     print("\nExiting the framework ...")
 
 
