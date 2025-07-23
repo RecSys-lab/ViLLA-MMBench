@@ -45,6 +45,23 @@ def topN(model, uid, N, train_set, iid_map, all_iids, train_seen):
 
 
 def calculateAverageMetrics(recs):
+    """
+    Calculate average metrics from the recommendation records.
+    This function computes various metrics such as Recall, NDCG, Cold-start Rate,
+    Coverage, Popularity Bias, Fairness, Novelty, Diversity, and Calibration Bias
+    for each model and scenario in the recommendation records.
+
+    Parameters
+    ----------
+    recs : pd.DataFrame
+        A DataFrame containing recommendation records with columns for various metrics.
+
+    Returns
+    -------
+    list of dict
+        A list of dictionaries where each dictionary contains the average metrics
+        for a specific model and scenario.
+    """
     metric_rows = []
     for col in [c for c in recs.columns if c.startswith("rec_")]:
         mdl, scn = col.split("_", 2)[1:]
@@ -103,20 +120,16 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
             itertools.chain(*(genre_dict.get(str(it), []) for it in train_items))
         )
         user_gen_dist = pd.Series(user_genres).value_counts().to_dict()
-
         r = {"userId": uid, "train": list(train_items), "gt": list(gt)}
-
+        # Prepare recommendations for each model and scenario
         for (mdl, scn), mod in final_models.items():
             rec = topN(mod, uid, topN_k, train_set, iid_map, all_iids, train_seen)
             r[f"rec_{mdl}_{scn}"] = rec
-
-            # ---------- Cold‑start Rate ------------------------------------------
+            # Cold-start Rate
             cold_rate = sum(it in cold_items for it in rec) / len(rec) if rec else 0
             r[f"CR_{mdl}_{scn}"] = cold_rate
             coverage_dict[(mdl, scn)].update(rec)
-            # ---------------------------------------------------------------------
-
-            # ---------- existing metrics -----------------------------------------
+            # Popularity Bias, Fairness, Novelty, Diversity, Calibration Bias
             pop_bias = (
                 np.mean([train_pop.get(it, 0) / max_pop for it in rec]) if rec else 0
             )
@@ -131,19 +144,17 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
                 if rec
                 else 0
             )
-
+            # Diversity, Calibration Bias, NDCG, Recall
             rec_gen = [genre_dict.get(str(it), ["(none)"]) for it in rec]
             diversity = ild(rec_gen)
-
             rec_gen_flat = list(itertools.chain(*rec_gen))
             rec_gen_dist = pd.Series(rec_gen_flat).value_counts().to_dict()
             calib = kl_div(user_gen_dist, rec_gen_dist)
-
             dcg = sum(1 / math.log2(rnk + 2) for rnk, it in enumerate(rec) if it in gt)
             idcg = sum(1 / math.log2(rnk + 2) for rnk in range(min(len(gt), 10)))
             ndcg = dcg / idcg if idcg else 0
             recall = len(set(rec) & gt) / len(gt) if gt else 0
-
+            # Update the row with the calculated metrics
             r.update(
                 {
                     f"PB_{mdl}_{scn}": pop_bias,

@@ -19,6 +19,33 @@ def gridMetric(
     USE_GPU_FOR_HPO,
     topN=10,
 ):
+    """
+    Computes the grid search metric for hyperparameter optimization.
+
+    Parameters
+    ----------
+    model : object
+        The model to be evaluated.
+    val_grp : dict
+        A dictionary mapping user IDs to their ground truth items.
+    train_fit_set : Dataset
+        The training dataset used for fitting the model.
+    train_seen : dict
+        A dictionary mapping user IDs to sets of seen items during training.
+    iid_map : dict
+        A mapping of item IDs to their indices in the training dataset.
+    all_iids : list
+        A list of all item IDs present in the training dataset.
+    USE_GPU_FOR_HPO : bool
+        Flag indicating whether to use GPU for hyperparameter optimization.
+    topN : int, optional
+        The number of top items to consider for evaluation (default is 10).
+
+    Returns
+    -------
+    float
+        The average of recall and normalized discounted cumulative gain (NDCG) for the model on the validation set.
+    """
     # Check if GPU is available for hyperparameter optimization
     CUPY = False
     if USE_GPU_FOR_HPO:
@@ -52,6 +79,30 @@ def gridMetric(
 
 
 def grid(dataDict, cls, name, scenario, param_grid, *fit_args):
+    """
+    Performs hyperparameter optimization (HPO) using grid search for a given model class.
+
+    Parameters
+    ----------
+    dataDict : dict
+        A dictionary containing the configuration and dataset information.
+    cls : class
+        The model class to be optimized.
+    name : str
+        The name of the model being optimized.
+    scenario : str
+        The scenario or context in which the model is being optimized.
+    param_grid : list of dict
+        A list of dictionaries containing hyperparameter configurations to be tested.
+    fit_args : tuple
+        Additional arguments required for fitting the model.
+
+    Returns
+    -------
+    tuple
+        A tuple containing the best model instance and its corresponding hyperparameters.
+        The model is fitted with the training set and evaluated on the validation set.
+    """
     config = dataDict["config"]
     val_grp = dataDict["val_grp"]
     iid_map = dataDict["iid_map"]
@@ -96,6 +147,28 @@ def grid(dataDict, cls, name, scenario, param_grid, *fit_args):
 def gridSearch(
     config: dict, train_df: pd.DataFrame, train_set: pd.DataFrame, modalities_dict: dict
 ):
+    """
+    Performs hyperparameter optimization (HPO) using grid search for multiple models.
+    This function prepares the dataset, defines the hyperparameter grid for each model,
+    and runs the grid search to find the best configurations.
+
+    Parameters
+    ----------
+    config : dict
+        The configuration dictionary containing experiment settings.
+    train_df : pd.DataFrame
+        The training DataFrame containing user-item interactions.
+    train_set : Dataset
+        The training dataset object containing user-item interactions.
+    modalities_dict : dict
+        A dictionary containing modalities for different models.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the final models after hyperparameter tuning.
+        The keys are tuples of model names and their variants, and the values are the fitted model instances.
+    """
     # Variables
     models_cfg = {}
     final_models = {}

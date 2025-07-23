@@ -24,6 +24,7 @@ def main():
     final_models = gridSearch(config, train_df, train_set, modalities_dict)
     # Step 4: Generate recommendations for the test set
     generateLists(config, train_df, train_set, test_df, genre_dict, final_models)
+    # Step 5: That's it! The framework has completed its execution.
     print("\nExiting the framework ...")
 
 
