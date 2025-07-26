@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Modules - ViLLA-MMBench</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="data.html">Data Modules</a>
+        <a href="process.html">Process Modules</a>
+        <a href="utils.html">Utilities</a>
+    </div>
+
+    <h1>ViLLA-MMBench Documentation</h1>
+
+    <div class="section">
+        <h2>Grid Search Module (grid.py)</h2>
+        <h3>Functions:</h3>
+        <ul>
+            <li><code>gridMetric(model, val_grp, train_fit_set, train_seen, iid_map, all_iids, USE_GPU_FOR_HPO, topN=10)</code>
+                <ul>
+                    <li>Evaluates model performance using specified metrics</li>
+                    <li>Used during hyperparameter optimization</li>
+                </ul>
+            </li>
+            <li><code>grid(dataDict, cls, name, scenario, param_grid, *fit_args)</code>
+                <ul>
+                    <li>Performs grid search for hyperparameter optimization</li>
+                    <li>Handles model fitting and evaluation</li>
+                </ul>
+            </li>
+            <li><code>gridSearch(config: dict, train_df: pd.DataFrame, train_set: pd.DataFrame, modalities_dict: dict)</code>
+                <ul>
+                    <li>Main function for model selection and training</li>
+                    <li>Supports multiple model types: CF, VBPR, VMF, AMR, VAECF</li>
+                    <li>Handles different modality combinations</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Processes Module (processes.py)</h2>
+        <h3>Functions:</h3>
+        <ul>
+            <li><code>generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_models)</code>
+                <ul>
+                    <li>Generates recommendation lists for evaluation</li>
+                    <li>Calculates various metrics:
+                        <ul>
+                            <li>Popularity Bias (PB)</li>
+                            <li>Fairness (FA)</li>
+                            <li>Novelty (NO)</li>
+                            <li>Diversity (DI)</li>
+                            <li>Calibration Bias (CB)</li>
+                            <li>Recall (RC)</li>
+                            <li>NDCG (ND)</li>
+                            <li>Coverage (CV)</li>
+                        </ul>
+                    </li>
+                    <li>Outputs results to CSV files</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Main Process Flow</h2>
+        <p>The main process flow (main.py) consists of the following steps:</p>
+        <ol>
+            <li>Configuration loading from config.yml</li>
+            <li>MovieLens data preparation and train-test splitting</li>
+            <li>Loading and processing of text, visual, and audio embeddings</li>
+            <li>Hyperparameter tuning using grid search</li>
+            <li>Generation of recommendation lists and metric calculation</li>
+        </ol>
+    </div>
+</body>
+</html>
