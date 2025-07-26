@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilities - ViLLA-MMBench</title>
+    <link rel="stylesheet" href="/ViLLA-MMBench/assets/css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="data.html">Data Modules</a>
+        <a href="process.html">Process Modules</a>
+        <a href="utils.html">Utilities</a>
+    </div>
+
+    <h1>Utilities Documentation</h1>
+
+    <div class="section">
+        <h2>Utility Functions (utils.py)</h2>
+        
+        <h3>Constants:</h3>
+        <pre>
+MULTI_VARIANTS = [
+    ("concat", None),
+    ("pca", 0.95),
+    ("cca", 40),
+]</pre>
+
+        <h3>Functions:</h3>
+        <ul>
+            <li><code>readConfigs(file_path: str) -> dict</code>
+                <ul>
+                    <li>Reads configuration from YAML file</li>
+                </ul>
+            </li>
+            
+            <li><code>applyKcore(df, k)</code>
+                <ul>
+                    <li>Applies k-core filtering to interaction data</li>
+                    <li>Ensures minimum number of interactions per user/item</li>
+                </ul>
+            </li>
+            
+            <li><code>parseSafe(s: str) -> np.ndarray</code>
+                <ul>
+                    <li>Safely parses string representations of numpy arrays</li>
+                </ul>
+            </li>
+            
+            <li><code>modelIsSelected(tag: str, model: str) -> bool</code>
+                <ul>
+                    <li>Checks if a specific model is selected in configuration</li>
+                </ul>
+            </li>
+            
+            <li><code>fitWithModalities(model, base_ds, item_img=None, item_feat=None)</code>
+                <ul>
+                    <li>Fits a model with specified modalities</li>
+                    <li>Handles image and feature modalities</li>
+                </ul>
+            </li>
+            
+            <li><code>gini(x)</code>
+                <ul>
+                    <li>Calculates Gini coefficient for fairness evaluation</li>
+                </ul>
+            </li>
+            
+            <li><code>ild(genres_list)</code>
+                <ul>
+                    <li>Calculates Intra-List Diversity based on genres</li>
+                </ul>
+            </li>
+            
+            <li><code>kl_div(p, q, eps=1e-8)</code>
+                <ul>
+                    <li>Calculates Kullback-Leibler divergence</li>
+                    <li>Used for calibration bias measurement</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Configuration (config.yml)</h2>
+        <h3>Key Configuration Parameters:</h3>
+        <ul>
+            <li>Dataset Configuration:
+                <ul>
+                    <li><code>ml_version</code>: MovieLens version ('100k' or '1m')</li>
+                    <li><code>k_core</code>: K-core filtering parameter</li>
+                    <li>Split configuration: mode and test ratio</li>
+                </ul>
+            </li>
+            <li>Model Configuration:
+                <ul>
+                    <li><code>model_choice</code>: Model selection ('cf', 'vbpr', 'amr', 'vmf')</li>
+                    <li><code>llm_prefix</code>: LLM selection for text processing</li>
+                    <li>Various modality variants (text, audio, visual)</li>
+                </ul>
+            </li>
+            <li>Training Parameters:
+                <ul>
+                    <li><code>n_epochs</code>: Number of training epochs</li>
+                    <li>Learning rates and other hyperparameters</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

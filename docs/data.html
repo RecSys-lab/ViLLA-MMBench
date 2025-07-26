@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Modules - ViLLA-MMBench</title>
+    <link rel="stylesheet" href="/ViLLA-MMBench/assets/css/style.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="data.html">Data Modules</a>
+        <a href="process.html">Process Modules</a>
+        <a href="utils.html">Utilities</a>
+    </div>
+
+    <h1>Data Modules Documentation</h1>
+
+    <div class="section">
+        <h2>MovieLens Module (movielens.py)</h2>
+        <h3>Functions:</h3>
+        <ul>
+            <li><code>downloadMovieLens(url, dest, VERBOSE=True)</code>: Downloads MovieLens dataset files</li>
+            <li><code>loadGenres(download_path_prefix: str, DATASET: str) -> pd.DataFrame</code>: Loads genre information for movies</li>
+            <li><code>prepareML(config: dict)</code>: Prepares MovieLens dataset with specified configurations, including k-core filtering and train-test splitting</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Modalities Module (modalities.py)</h2>
+        <h3>Function:</h3>
+        <ul>
+            <li><code>prepareModalities(config: dict, train_df: pd.DataFrame, test_df: pd.DataFrame)</code>
+                <ul>
+                    <li>Loads and processes text, visual, and audio embeddings</li>
+                    <li>Merges different modalities</li>
+                    <li>Handles NaN/Inf values</li>
+                    <li>Creates modality-specific image and feature objects</li>
+                    <li>Implements dimensionality reduction (PCA, CCA)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Audio Module (audio.py)</h2>
+        <h3>Constants:</h3>
+        <pre>
+AUD_FILE_MAP = {
+    "mmtf_corr": "fused_llm_mmtf_audio_correlation.csv",
+    "mmtf_delta": "fused_llm_mmtf_audio_delta.csv",
+    "mmtf_log": "fused_llm_mmtf_audio_log.csv",
+    "mmtf_spect": "fused_llm_mmtf_audio_spectral.csv",
+    "i_ivec": "i-vector/fused_llm_mmtf_audio_IVec_splitItem_fold_1_gmm_128_tvDim_20.csv"
+}</pre>
+        <h3>Functions:</h3>
+        <ul>
+            <li><code>readAudioCsv(url)</code>: Reads audio feature CSV files</li>
+            <li><code>loadAudio(config: dict)</code>: Loads and processes audio embeddings</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Text & Visual Modules</h2>
+        <h3>Text Module (text.py):</h3>
+        <ul>
+            <li><code>loadText(config: dict)</code>: Loads and processes textual embeddings</li>
+        </ul>
+
+        <h3>Visual Module (visual.py):</h3>
+        <ul>
+            <li><code>loadVisual(config: dict)</code>: Loads and processes visual embeddings</li>
+        </ul>
+    </div>
+</body>
+</html>

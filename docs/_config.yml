@@ -1,0 +1,6 @@
+theme: jekyll-theme-minimal
+title: ViLLA-MMBench Documentation
+description: Documentation for the ViLLA-MMBench framework
+show_downloads: true
+github:
+  is_project_page: true
