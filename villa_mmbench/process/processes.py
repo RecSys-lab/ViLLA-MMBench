@@ -1,3 +1,4 @@
+import os
 import math
 import itertools
 import collections
@@ -100,6 +101,7 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
     train_pop = {}
     DATASET = config["data"]["ml_version"]
     topN_k = config["recommender"]["topN_k"]
+    ROOT_PATH = config["general"]["root_path"]
     MODEL_CHOICE = config["modality"]["model_choice"]
     COLD_TH = config["recommender"]["cold_threshold"]
     # Prepare item ID mappings
@@ -174,14 +176,16 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
         recs[f"CV_{mdl}_{scn}"] = coverage
     #
     fn_suffix = f"{DATASET}_{MODEL_CHOICE}"
-    recs.to_csv(f"outputs/reclist_df_{fn_suffix}.csv", index=False)
-    print(f"✔ reco lists saved → outputs/reclist_df_{fn_suffix}.csv")
+    reclist_save_path = os.path.join(ROOT_PATH, "outputs", f"reclist_df_{fn_suffix}.csv")
+    aggmetrics_save_path = os.path.join(ROOT_PATH, "outputs", f"agg_metrics_{fn_suffix}.csv")
+    recs.to_csv(reclist_save_path, index=False)
+    print(f"✔ reco lists saved → {reclist_save_path}")
     print(recs.head(5))
     # Calculate average metrics
     metric_rows = calculateAverageMetrics(recs)
     agg = pd.DataFrame(metric_rows)
-    agg.to_csv(f"outputs/agg_metrics_{fn_suffix}.csv", index=False)
-    print(f"✔ metrics saved → outputs/agg_metrics_{fn_suffix}.csv")
+    agg.to_csv(aggmetrics_save_path, index=False)
+    print(f"✔ metrics saved → {aggmetrics_save_path}")
     pd.options.display.float_format = lambda x: f"{x:8.3f}"
     print("\n═════ FINAL METRICS ═════")
     print(agg.sort_values(["model", "scenario"]).to_string(index=False))
