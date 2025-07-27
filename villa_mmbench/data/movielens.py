@@ -188,7 +188,8 @@ def prepareML(config: dict):
         print(f"✔ Split train = {len(train_df):,}  test = {len(test_df):,}")
     # train_set = Dataset.from_uir(train_df[['user_id','item_id','rating']].values.tolist())
     # Save the genres DataFrame to a CSV file
-    genres_df.to_csv("outputs/item_metadata_genres.csv", index=False)
-    print("✔ outputs/item_metadata_genres.csv saved!")
+    genres_df_save_path = os.path.join(ROOT_PATH, "outputs", "item_metadata_genres.csv")
+    genres_df.to_csv(genres_df_save_path, index=False)
+    print(f"✔ {genres_df_save_path} saved!")
     # Return
     return train_df, test_df, genre_dict
