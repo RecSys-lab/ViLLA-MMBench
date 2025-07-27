@@ -91,7 +91,7 @@ def calculateAverageMetrics(recs):
                 "CalibrationBias": cb,
             }
         )
-        return metric_rows
+    return metric_rows
 
 
 def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_models):
@@ -104,6 +104,8 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
     ROOT_PATH = config["general"]["root_path"]
     MODEL_CHOICE = config["modality"]["model_choice"]
     COLD_TH = config["recommender"]["cold_threshold"]
+    LLM_PREFIX = config["modality"]["llm_prefix"]
+    TEXT_AUG = "aug" if config["modality"]["text_augmented"] else "raw"
     # Prepare item ID mappings
     train_seen = train_df.groupby("user_id")["item_id"].apply(set).to_dict()
     all_iids, iid_map = train_set.item_ids, train_set.iid_map
@@ -175,8 +177,8 @@ def generateLists(config: dict, train_df, train_set, test_df, genre_dict, final_
         coverage = len(items) / len(all_iids)
         recs[f"CV_{mdl}_{scn}"] = coverage
     #
-    fn_suffix = f"{DATASET}_{MODEL_CHOICE}"
-    reclist_save_path = os.path.join(ROOT_PATH, "outputs", f"reclist_df_{fn_suffix}.csv")
+    fn_suffix = f"{DATASET}_{MODEL_CHOICE}_{LLM_PREFIX}_{TEXT_AUG}"
+    reclist_save_path = os.path.join(ROOT_PATH, "outputs", f"reclist_{fn_suffix}.csv")
     aggmetrics_save_path = os.path.join(ROOT_PATH, "outputs", f"agg_metrics_{fn_suffix}.csv")
     recs.to_csv(reclist_save_path, index=False)
     print(f"✔ reco lists saved → {reclist_save_path}")
