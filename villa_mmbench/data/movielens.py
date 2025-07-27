@@ -116,9 +116,10 @@ def prepareML(config: dict):
     SEED = config["experiment"]["seed"]
     DATASET = config["data"]["ml_version"]
     VERBOSE = config["experiment"]["verbose"]
+    ROOT_PATH = config["general"]["root_path"]
     SPLIT_MODE = config["data"]["split"]["mode"]
     TEST_RATIO = config["data"]["split"]["test_ratio"]
-    download_path_prefix = os.path.join("villa_mmbench", "data", "downloaded")
+    download_path_prefix = os.path.join(ROOT_PATH, "villa_mmbench", "data", "downloaded")
     # Download the dataset
     print(f"\nPreparing 'MovieLens {DATASET}' data ...")
     if DATASET == "100k":

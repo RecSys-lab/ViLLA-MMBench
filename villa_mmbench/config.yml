@@ -1,6 +1,8 @@
 general:
   # The name of the framework
   name: "ViLLA-MMBench"
+  # Root path for the framework
+  root_path: "" # Empty for local, "ViLLA-MMBench" for Google Colab
 experiment:
   # Fast prototype flag (for quick testing with 1 epoch)
   fast_prototype: true
