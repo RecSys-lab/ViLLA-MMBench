@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
@@ -14,6 +15,7 @@ def prepareModalities(config: dict, train_df: pd.DataFrame, test_df: pd.DataFram
     # Variables
     SEED = config["experiment"]["seed"]
     VERBOSE = config["experiment"]["verbose"]
+    ROOT_PATH = config["general"]["root_path"]
     # Fetch modalities from configuration
     vis_df = loadVisual(config)
     aud_df = loadAudio(config)
@@ -93,9 +95,8 @@ def prepareModalities(config: dict, train_df: pd.DataFrame, test_df: pd.DataFram
             if VERBOSE:
                 print(f"✔ CCA {comps} dims = {comps}")
     # Save the merged DataFrame to a CSV file
-    merged[["itemId", "audio", "visual", "text"]].to_csv(
-        "outputs/item_embeddings_summary.csv", index=False
-    )
-    print("✔ outputs/item_embeddings_summary.csv saved!")
+    genres_df_save_path = os.path.join(ROOT_PATH, "outputs", "item_embeddings_summary.csv")
+    merged[["itemId", "audio", "visual", "text"]].to_csv(genres_df_save_path, index=False)
+    print(f"✔ {genres_df_save_path} saved!")
     # Return
     return train_df, test_df, train_set, modalities_dict
