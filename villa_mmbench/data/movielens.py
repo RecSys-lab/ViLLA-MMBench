@@ -3,7 +3,6 @@ import zipfile
 import requests
 import numpy as np
 import pandas as pd
-from cornac.data import Dataset
 from villa_mmbench.utils.utils import applyKcore
 
 ML100K_URL = "https://files.grouplens.org/datasets/movielens/ml-100k/u.data"

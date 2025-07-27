@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-from data.text import loadText
-from data.audio import loadAudio
-from data.visual import loadVisual
 from sklearn.decomposition import PCA
 from sklearn.cross_decomposition import CCA
+from villa_mmbench.data.text import loadText
+from villa_mmbench.data.audio import loadAudio
+from villa_mmbench.data.visual import loadVisual
 from sklearn.preprocessing import StandardScaler
 from villa_mmbench.utils.utils import MULTI_VARIANTS
 from cornac.data import ImageModality, FeatureModality, Dataset
