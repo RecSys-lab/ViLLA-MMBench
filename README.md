@@ -1,6 +1,6 @@
 # ViLLA-MMBench
 
-Welcome to the **ViLLA-MMBench** repository! This project provides the source code and fully reproducible results for our upcoming paper submitted to **RecSys'25**.
+Welcome to the **ViLLA-MMBench** repository! This project provides the source code and fully reproducible results for our upcoming paper.
 
 ## 📦 What's Included?
 
@@ -20,9 +20,10 @@ Welcome to the **ViLLA-MMBench** repository! This project provides the source co
 ## 📂 Folders and Files
 
 - **Colabs**
-  - `villa_mmbench.ipynb`: the primary toolkit file containing all functions and configurations
-  - `rank_aggregation.ipynb`: functions for rank aggregation
-  - `data_visualization.ipynb`: procedures to visualize processed data
+  - [`villa_mmbench.ipynb`](colabs/villa_mmbench.ipynb): the primary toolkit containing all functions and configurations
+  - [`villa_mmbench_benchmark.ipynb`](colabs/villa_mmbench_benchmark.ipynb): a sample colab for benchmarking using ViLLA-MMBench
+  - [`rank_aggregation.ipynb`](colabs/rank_aggregation.ipynb): functions for rank aggregation
+  - [`data_visualization.ipynb`](colabs/data_visualization.ipynb): procedures to visualize processed data
 - **RecList**: contains the list of generated recommendation lists
 
 ## 📚 Citation
