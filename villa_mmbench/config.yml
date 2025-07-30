@@ -15,7 +15,7 @@ experiment:
   # Verbose logging
   verbose: true
   # Number of epochs for training
-  n_epochs: 20 # Ineffective if fast_prototype is true
+  n_epochs: 25 # Ineffective if fast_prototype is true
 modality:
   # Model choice for the experiment
   model_choice: "cf" # 'cf' | 'vbpr' | 'amr' | 'vmf'
